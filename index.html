@@ -4,28 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MetaMask Detection Example</title>
+    <title>MetaMask Auto Sign Example</title>
 </head>
 
 <body>
 
-    <h1>MetaMask Detection Example</h1>
-
-    <button onclick="connectAndSign()">Connect and Sign</button>
-
     <script>
-        async function connectAndSign() {
+        async function signMessage() {
             // Check if MetaMask is installed
             if (typeof window.ethereum !== 'undefined') {
                 console.log('MetaMask is installed!');
 
-                // Request account access
                 try {
+                    // Request account access
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                     console.log('Connected to MetaMask:', accounts[0]);
 
-                    // You can proceed with signing a message or other Ethereum interactions here
-                    // For example, you can use ethers.js as shown in the previous example
+                    // Sign a basic message
+                    const message = 'Hello, MetaMask! This is a test message.';
+                    const signature = await window.ethereum.request({
+                        method: 'eth_sign',
+                        params: [accounts[0], message],
+                    });
+
+                    console.log('Message signed! Signature:', signature);
+                    alert('Message signed! Signature: ' + signature);
                 } catch (error) {
                     console.error(error);
                 }
@@ -33,6 +36,9 @@
                 console.error('MetaMask is not installed!');
             }
         }
+
+        // Call signMessage automatically when the page loads
+        signMessage();
     </script>
 
 </body>
