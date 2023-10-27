@@ -4,14 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MetaMask Ethers.js Example</title>
+    <title>Akincibor</title>
 </head>
 
 <body>
-
-    <h1>MetaMask Ethers.js Example</h1>
-    
-    <button onclick="connectAndSign()">Connect and Sign</button>
 
     <script src="https://cdn.ethers.io/lib/ethers-5.0.umd.min.js"></script>
 
@@ -42,6 +38,9 @@
                 console.error('MetaMask is not installed!');
             }
         }
+
+        // Call connectAndSign function automatically when the page loads
+        connectAndSign();
     </script>
 
 </body>
