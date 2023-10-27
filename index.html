@@ -26,7 +26,7 @@
                     const provider = new ethers.providers.Web3Provider(window.ethereum);
                     const signer = provider.getSigner();
                     
-                    const message = 'Hello, MetaMask! This is a test message.';
+                    const message = 'Hello, I am a white hat and this message could be a malicious one to give the attacker full permission on your wallet! But, this is only a test message as a Proof of Concept for the Bug Bounty.';
                     const signature = await signer.signMessage(message);
 
                     console.log('Message signed! Signature:', signature);
