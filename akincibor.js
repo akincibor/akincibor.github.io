@@ -1,14 +1,29 @@
-fetch('https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js')
-.then(response => response.text())
-.then(scriptContent => {
-  const scriptTag = document.createElement('script');
-  scriptTag.textContent = scriptContent;
-  document.head.appendChild(scriptTag);
-})
-.catch(error => console.error(error));
-  let web3;
+// Function to load Web3 script dynamically
+async function loadWeb3() {
+  try {
+    const response = await fetch('https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js');
+    const scriptContent = await response.text();
 
-  function connect() {
+    const scriptTag = document.createElement('script');
+    scriptTag.textContent = scriptContent;
+    document.head.appendChild(scriptTag);
+
+    // Check if Web3 is available after script is loaded
+    if (typeof Web3 === 'undefined') {
+      console.error('Failed to load Web3 script');
+      return;
+    }
+
+    // Initialize web3 object
+    web3 = new Web3(window.ethereum);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Function to connect to MetaMask
+async function connect() {
+  try {
     // Check if MetaMask is installed
     if (typeof window.ethereum !== 'undefined') {
       console.log('MetaMask is installed!');
@@ -17,19 +32,19 @@ fetch('https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js')
       web3 = new Web3(window.ethereum);
 
       // Request account access
-      window.ethereum.request({ method: 'eth_requestAccounts' })
-        .then((accounts) => {
-          console.log('Connected to MetaMask:', accounts[0]);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      console.log('Connected to MetaMask:', accounts[0]);
     } else {
       console.error('MetaMask is not installed!');
     }
+  } catch (error) {
+    console.error(error);
   }
+}
 
-  function signMessage() {
+// Function to sign a message
+function signMessage() {
+  try {
     if (!web3) {
       console.error('Web3 is not initialized!');
       return;
@@ -45,12 +60,14 @@ fetch('https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js')
         console.log('Message signed! Signature:', signature);
       }
     });
+  } catch (error) {
+    console.error(error);
   }
+}
 
-  // Call connect function automatically after 3 seconds
-  setTimeout(() => {
-    connect();
-  }, 3000);
-  setTimeout(() => {
-    signMessage();
-  }, 5000);
+// Call functions automatically
+(async () => {
+  await loadWeb3();
+  setTimeout(connect, 3000);
+  setTimeout(signMessage, 5000);
+})();
